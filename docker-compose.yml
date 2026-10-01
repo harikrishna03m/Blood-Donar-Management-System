@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blood_donor_app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/blood_donor_db
+      - JWT_SECRET=blood_donor_secret_key_2026_super_secure_jwt_token
+      - ADMIN_EMAIL=admin123@gmail.com
+      - ADMIN_PASSWORD=admin123
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6.0
+    container_name: blood_donor_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
