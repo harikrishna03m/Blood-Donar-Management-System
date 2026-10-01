@@ -2,20 +2,6 @@ const User = require('../models/User');
 const BloodRequest = require('../models/BloodRequest');
 const DonationRecord = require('../models/DonationRecord');
 
-const initialAdmin = {
-  name: 'System Administrator',
-  email: process.env.ADMIN_EMAIL || 'admin123@gmail.com',
-  password: process.env.ADMIN_PASSWORD || 'admin123',
-  role: 'admin',
-  bloodGroup: 'O+',
-  phone: '+1 (555) 019-2831',
-  city: 'New York',
-  state: 'NY',
-  isAvailable: false,
-  isVerified: true,
-  bio: 'Blood Bank Administration & Donor Network Coordinator',
-};
-
 const sampleDonors = [
   {
     name: 'Sarah Jenkins',
@@ -28,7 +14,7 @@ const sampleDonors = [
     age: 28,
     gender: 'Female',
     isAvailable: true,
-    lastDonationDate: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000), // 120 days ago (eligible)
+    lastDonationDate: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000),
     totalDonations: 6,
     isVerified: true,
     bio: 'Universal donor (O-). Dedicated to helping in critical emergencies!',
@@ -76,7 +62,7 @@ const sampleDonors = [
     age: 41,
     gender: 'Male',
     isAvailable: true,
-    lastDonationDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago (temporarily resting)
+    lastDonationDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     totalDonations: 12,
     isVerified: true,
     bio: 'Universal recipient (AB+) and frequent platelet donor.',
@@ -212,16 +198,36 @@ const sampleRequests = [
 
 const seedDatabaseIfEmpty = async () => {
   try {
+    const isSeedingEnabled = process.env.SEED_DEV_DATA === 'true' || process.env.SEED_DATA === 'true';
+    if (!isSeedingEnabled) {
+      return;
+    }
+
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
     const adminCount = await User.countDocuments({ role: 'admin' });
-    if (adminCount === 0) {
-      console.log('--- Initializing Admin User ---');
+    if (adminCount === 0 && adminEmail && adminPassword) {
+      const initialAdmin = {
+        name: process.env.ADMIN_NAME || 'System Administrator',
+        email: adminEmail.toLowerCase().trim(),
+        password: adminPassword,
+        role: 'admin',
+        bloodGroup: process.env.ADMIN_BLOOD_GROUP || 'O+',
+        phone: process.env.ADMIN_PHONE || '+1 (555) 019-2831',
+        city: process.env.ADMIN_CITY || 'New York',
+        state: process.env.ADMIN_STATE || 'NY',
+        isAvailable: false,
+        isVerified: true,
+        bio: 'Blood Bank Administration & Donor Network Coordinator',
+      };
       await User.create(initialAdmin);
-      console.log(`[Admin Seeded]: Email: ${initialAdmin.email} | Password: ${initialAdmin.password}`);
+      console.log(`[Admin Seeded]: Initial admin account initialized successfully (${adminEmail})`);
     }
 
     const donorCount = await User.countDocuments({ role: 'donor' });
     if (donorCount === 0) {
-      console.log('--- Seeding Sample Donors & Blood Requests ---');
+      console.log('--- Seeding Development Sample Donors & Blood Requests ---');
       for (const donorData of sampleDonors) {
         await User.create(donorData);
       }
@@ -232,7 +238,7 @@ const seedDatabaseIfEmpty = async () => {
       }
       console.log(`[Blood Requests Seeded]: ${sampleRequests.length} requests created`);
 
-      // Seed a few sample donation records
+      // Seed a sample donation record
       const seededDonor = await User.findOne({ email: 'sarah.j@example.com' });
       if (seededDonor) {
         await DonationRecord.create({
@@ -248,8 +254,26 @@ const seedDatabaseIfEmpty = async () => {
       }
     }
   } catch (err) {
-    console.error('Error during auto-seeding:', err.message);
+    console.error('Error during development database seeding:', err.message);
   }
 };
 
-module.exports = { seedDatabaseIfEmpty, initialAdmin, sampleDonors, sampleRequests };
+if (require.main === module) {
+  require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+  const { connectDB, disconnectDB } = require('../config/db');
+  (async () => {
+    try {
+      await connectDB();
+      process.env.SEED_DEV_DATA = 'true';
+      await seedDatabaseIfEmpty();
+      console.log('Database seeding process completed.');
+      await disconnectDB();
+      process.exit(0);
+    } catch (e) {
+      console.error('Manual seed execution failed:', e);
+      process.exit(1);
+    }
+  })();
+}
+
+module.exports = { seedDatabaseIfEmpty, sampleDonors, sampleRequests };

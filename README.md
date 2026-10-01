@@ -40,7 +40,7 @@ A full-stack **MERN** (MongoDB, Express.js, React, Node.js) web platform connect
 ### 4. Donor Registration & Login
 - **Donor Registration**: Form with frontend & backend validation (email, password, phone, blood group, city, age, gender, last donation date).
 - **Secure Authentication**: Passwords securely hashed with `bcryptjs`, authenticated via JWT Bearer tokens.
-- **Dual Login**: Unified portal for Donors and Administrators with 1-click test credentials for easy evaluation.
+- **Unified Login**: Standard login portal for registered Donors and System Administrators with role-based routing.
 
 ### 5. Donor Dashboard (`/donor/dashboard`)
 - **Readiness Status**: Toggle between **Available** and **Resting** in real-time.
@@ -50,9 +50,7 @@ A full-stack **MERN** (MongoDB, Express.js, React, Node.js) web platform connect
 - **My Pledges**: Track requests you have pledged to support.
 
 ### 6. Admin Management Console (`/admin`)
-- **Dev Admin Credentials**:
-  - **Email**: `admin123@gmail.com`
-  - **Password**: `admin123`
+- **Secure Administrator Access**: Configured securely via environment variables (`ADMIN_EMAIL` and `ADMIN_PASSWORD`).
 - **Analytics Overview**: Donors breakdown by blood group, requests by status, total donations.
 - **Donor Management**: Search, filter, edit donor information, toggle availability, add new donors, or delete records.
 - **Request Oversight**: Manage live requests, update fulfillment status (*Open*, *In Progress*, *Fulfilled*, *Cancelled*), or broadcast emergency requests.
@@ -139,16 +137,19 @@ blood-donar-mangement-system/
 PORT=5000
 NODE_ENV=development
 
-# MongoDB Connection String (Leave empty to use zero-config built-in MongoDB)
+# MongoDB Connection String (Leave empty for zero-config built-in MongoDB in development)
 MONGODB_URI=
 
-# JWT Secret
-JWT_SECRET=blood_donor_secret_key_2026_super_secure_jwt_token
+# JWT Secret & Expiry
+JWT_SECRET=your_jwt_secret_key_here
 JWT_EXPIRE=30d
 
-# Development Admin Account
-ADMIN_EMAIL=admin123@gmail.com
-ADMIN_PASSWORD=admin123
+# Admin Account Configuration (Securely configured via environment)
+ADMIN_EMAIL=your_admin_email@domain.com
+ADMIN_PASSWORD=your_secure_admin_password
+
+# Development Seeding (Set to true only when explicitly populating sample dev data)
+SEED_DEV_DATA=false
 ```
 
 ---
@@ -185,14 +186,23 @@ npm run dev
 
 ---
 
-## 🔑 Demo Login Accounts
+## 🚀 Deployment on Render
 
-| Role | Email | Password | Access Level |
-|---|---|---|---|
-| **System Admin** | `admin123@gmail.com` | `admin123` | Full administrative control, donor & request management |
-| **Sample Donor** | `sarah.j@example.com` | `password123` | O- Donor profile, pledge submissions, donation logging |
-
-*(Quick 1-click buttons are also provided on the `/login` page for fast testing).*
+1. **Push your code to GitHub/GitLab**.
+2. **Create a new Web Service** on [Render](https://render.com) or use **Render Blueprints** (`render.yaml`).
+3. Set the following configuration settings:
+   - **Environment**: `Node`
+   - **Build Command**: `npm install && npm run build --prefix client && npm install --prefix server`
+   - **Start Command**: `npm run start --prefix server`
+4. Add the following **Environment Variables** in the Render Dashboard:
+   - `NODE_ENV`: `production`
+   - `PORT`: `10000` (or leave default for Render)
+   - `MONGODB_URI`: Your production MongoDB Atlas connection string (e.g., `mongodb+srv://<user>:<password>@cluster.mongodb.net/blood_donor_db`)
+   - `JWT_SECRET`: A long, random secure secret string
+   - `ADMIN_EMAIL`: Your private administrator email address
+   - `ADMIN_PASSWORD`: Your private administrator password
+   - `SEED_DEV_DATA`: `false` (keeps existing production database intact)
+5. Click **Deploy**. Render will automatically build the React client, install backend dependencies, and serve the unified production application.
 
 ---
 

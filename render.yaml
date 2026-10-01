@@ -15,6 +15,8 @@ services:
       - key: MONGODB_URI
         sync: false
       - key: ADMIN_EMAIL
-        value: admin123@gmail.com
+        sync: false
       - key: ADMIN_PASSWORD
-        value: admin123
+        sync: false
+      - key: SEED_DEV_DATA
+        value: "false"

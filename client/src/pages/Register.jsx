@@ -181,7 +181,7 @@ const Register = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g., Sarah Jenkins"
+                    placeholder="e.g., Alex Morgan"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="form-input"
@@ -202,7 +202,7 @@ const Register = () => {
                   <input
                     type="email"
                     required
-                    placeholder="sarah@example.com"
+                    placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="form-input"

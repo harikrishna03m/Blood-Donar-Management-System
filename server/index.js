@@ -84,7 +84,6 @@ const startServer = async () => {
       console.log(`====================================================`);
       console.log(`Blood Donor API Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`Dev Admin: ${process.env.ADMIN_EMAIL || 'admin123@gmail.com'}`);
       console.log(`====================================================`);
     });
 

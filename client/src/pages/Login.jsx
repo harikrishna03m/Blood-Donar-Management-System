@@ -6,10 +6,6 @@ import {
   Lock,
   Mail,
   Droplets,
-  ShieldAlert,
-  User,
-  ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 const Login = () => {
@@ -48,16 +44,6 @@ const Login = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleFillDemoAdmin = () => {
-    setEmail('admin123@gmail.com');
-    setPassword('admin123');
-  };
-
-  const handleFillDemoDonor = () => {
-    setEmail('sarah.j@example.com');
-    setPassword('password123');
   };
 
   return (
@@ -142,43 +128,6 @@ const Login = () => {
               {isSubmitting ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
-
-          {/* 1-Click Quick Demo Login Helper Box */}
-          <div
-            style={{
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              borderRadius: '12px',
-              padding: '1rem',
-              marginBottom: '1.5rem',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#0f172a', fontWeight: 700, fontSize: '0.82rem', marginBottom: '0.6rem' }}>
-              <Sparkles size={14} color="#dc2626" />
-              <span>Quick 1-Click Demo Credentials (Development)</span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-              <button
-                type="button"
-                onClick={handleFillDemoAdmin}
-                className="btn btn-secondary btn-sm"
-                style={{ fontSize: '0.78rem', padding: '0.45rem', justifyContent: 'flex-start' }}
-              >
-                <ShieldAlert size={14} color="#dc2626" />
-                <span>Admin Login</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleFillDemoDonor}
-                className="btn btn-secondary btn-sm"
-                style={{ fontSize: '0.78rem', padding: '0.45rem', justifyContent: 'flex-start' }}
-              >
-                <User size={14} color="#16a34a" />
-                <span>Donor (Sarah)</span>
-              </button>
-            </div>
-          </div>
 
           {/* Registration link */}
           <div style={{ textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>

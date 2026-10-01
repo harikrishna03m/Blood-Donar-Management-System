@@ -204,7 +204,7 @@ const FindDonors = () => {
                   <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
                   <input
                     type="text"
-                    placeholder="e.g., Sarah or New York..."
+                    placeholder="Search by name or keyword..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-input"
