@@ -1,0 +1,27 @@
+{
+  "name": "blood-donor-and-finder-management-system",
+  "version": "1.0.0",
+  "description": "Full-stack MERN Blood Donor and Finder Management System",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed": "npm run seed --prefix server",
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "blood-donor",
+    "blood-bank",
+    "mern-stack",
+    "react",
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "MIT"
+}
