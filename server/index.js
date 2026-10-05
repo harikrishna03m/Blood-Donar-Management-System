@@ -10,6 +10,8 @@ const { seedDatabaseIfEmpty } = require('./utils/seed');
 // Load environment variables
 dotenv.config();
 
+// Initialize Express Application
+
 const app = express();
 
 // Middlewares
